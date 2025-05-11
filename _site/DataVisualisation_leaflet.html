@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Hendrilalaina" />
+
+<meta name="date" content="2025-04-07" />
+
+<title>leaflet</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-2.2.2/leaflet.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="DataVisualisation_ggplot.html">Ggplot</a>
+</li>
+<li>
+  <a href="DataVisualisation_plotly.html">Plotly</a>
+</li>
+<li>
+  <a href="DataVisualisation_leaflet.html">Leaflet</a>
+</li>
+<li>
+  <a href="DataVisualisation_dygraphs.html">Dygraphs</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">leaflet</h1>
+<h4 class="author">Hendrilalaina</h4>
+<h4 class="date">2025-04-07</h4>
+
+</div>
+
+
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<ul>
+<li>Objectives: leaflet, geospatial</li>
+<li>Requirements: R Data-Mining</li>
+</ul>
+<p>In 1854 a Cholera epidemic haunts London. By then common theory is
+that Cholera is transmitted by air. English physician John Snow doubts
+this theory and is maybe the first one to perform geospatial analysis.
+He plot locations of Cholera-deaths and pumps and finds the causal link
+between water and Cholera. We will take a loook at his results and learn
+how to use <strong>leaflet</strong> package.</p>
+</div>
+<div id="data-import" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Data Import</h1>
+<p>You need to download data of <strong>Cholera Pumps &amp;
+Deaths</strong> from the link in Bibliography at the end of this article
+and save .csv file locally.</p>
+<pre class="r"><code>deaths_pumps &lt;- read.csv(&quot;../RUltimateMaterial-main/data/Cholera Pumps &amp; Deaths.csv&quot;)</code></pre>
+</div>
+<div id="data-preparation" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Data preparation</h1>
+<p>We need two packages: * <em>leaflet</em> for geospatial plotting *
+<em>dplyr</em> for data preparation</p>
+<pre class="r"><code>library(leaflet)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;leaflet&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:xts&#39;:
+## 
+##     addLegend</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
+<p><em>geometry</em> variable in <em>deaths_pumps</em> requires an
+extraction of longitude and latitude coordinates. Some irrelevant
+information is removed with <em>gsub</em>. Then, longitude and latitude
+information is extracted with <em>strsplit</em>, <em>unlist</em> and
+<em>as.numeric</em>. Coordinates (long and lat) are stored in one long
+vector <em>coords</em>. But they are easy to split: longitudes are small
+(below zero) and latitude above 50. Then, dataframe
+<em>deaths_pumps</em> is separated into <em>deaths</em> and
+<em>pumps</em>. Deaths are indicated by a count above 0 and pumps by a
+count below 0.</p>
+<pre class="r"><code>deaths_pumps$geometry &lt;- gsub(&quot;&lt;Point&gt;&lt;coordinates&gt;&quot;, &quot;&quot;, deaths_pumps$geometry)
+deaths_pumps$geometry &lt;- gsub(&quot;&lt;/coordinates&gt;&lt;/Point&gt;&quot;, &quot;&quot;, deaths_pumps$geometry)
+
+coords &lt;- deaths_pumps$geometry %&gt;%
+  strsplit(., &quot;,&quot;) %&gt;%
+  unlist() %&gt;%
+  as.numeric()
+
+deaths_pumps$long &lt;- coords[coords &lt; 2]
+deaths_pumps$lat &lt;- coords[coords &gt; 50]
+deaths &lt;- deaths_pumps %&gt;%
+  filter (count &gt; 0)
+pumps &lt;- deaths_pumps %&gt;%
+  filter (count &lt; 0)
+
+median_location &lt;- data.frame(long = median(deaths$long),
+                              lat = median(deaths$lat))</code></pre>
+</div>
+<div id="create-geospatial-plot" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Create Geospatial
+Plot</h1>
+<p>We create an object <strong>lf</strong> which will include all our
+information on the plot. First, we apply function
+<strong>leaflet</strong> and make extensive use of pipping operator to
+load further information. We use Stamen.Toner to get the more classical
+black and white look. With <strong>setView</strong> we define the center
+and zoom of our map. We add circles for deaths and pumps.</p>
+<p>Deaths are marked in red. With increasing death count radius
+increases. Pumps are marked in green.</p>
+<pre class="r"><code>lf &lt;- leaflet() %&gt;%
+  addTiles() %&gt;%
+  setView(lng = median_location$long,
+          lat = median_location$lat,
+          zoom = 15) %&gt;%
+  addCircles(lng = deaths$long,
+             lat = deaths$lat,
+             radius = deaths$count*2,
+             stroke = F,
+             color = &quot;red&quot;,
+             fillOpacity = 0.8,
+             popup = paste(&quot;Deaths: &quot;, deaths$count)) %&gt;%
+  addCircles(lng = pumps$long,
+             lat = pumps$lat,
+             radius = 2,
+             color = &quot;green&quot;,
+             fillOpacity = 1,
+             popup = &quot;Pump&quot;)
+lf</code></pre>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-c7be1f8080ccb02abad1" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-c7be1f8080ccb02abad1">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addCircles","args":[[51.513418,51.513361,51.513317,51.513262,51.513204,51.513184,51.513359,51.513328,51.513323,51.513427,51.513381,51.513462,51.513216,51.513169,51.513116,51.51324,51.513164,51.513178,51.513111,51.513055,51.513441,51.513592,51.513402,51.51338,51.513411,51.513641,51.513693,51.513745,51.513676,51.51359,51.513663,51.513502,51.513583,51.513541,51.513298,51.513291,51.513013,51.512965,51.512893,51.512964,51.513025,51.513027,51.512831,51.512885,51.512526,51.512465,51.512428,51.512415,51.51251,51.512378,51.512447,51.512491,51.512374,51.512339,51.512364,51.512319,51.51254,51.512649,51.512692,51.512957,51.512765,51.51278,51.512726,51.512681,51.512914,51.513046,51.513074,51.513087,51.513122,51.513187,51.513214,51.513249,51.513271,51.5133,51.51316,51.513016,51.512921,51.51289,51.512859,51.51283,51.512782,51.512729,51.512868,51.512723,51.512654,51.512713,51.512615,51.512491,51.512449,51.512465,51.512413,51.512358,51.512271,51.512355,51.511991,51.512083,51.512031,51.51197,51.511882,51.51205,51.51225,51.512162,51.512212,51.512573,51.512575,51.512672,51.512727,51.512794,51.512846,51.512879,51.512939,51.512765,51.512844,51.512532,51.512198,51.512215,51.513154,51.513056,51.513165,51.513098,51.513238,51.513293,51.513379,51.513431,51.513475,51.513422,51.513528,51.513481,51.513594,51.513227,51.51318,51.513132,51.513048,51.513006,51.512883,51.51327,51.513459,51.513431,51.513402,51.512593,51.512585,51.512555,51.512521,51.513137,51.513228,51.513152,51.513258,51.513544,51.513626,51.513637,51.513524,51.51382,51.513724,51.513704,51.513831,51.513915,51.513597,51.514032,51.513891,51.513758,51.514065,51.514146,51.514201,51.51423,51.514319,51.514377,51.514357,51.514382,51.514402,51.514522,51.514497,51.514472,51.514504,51.514546,51.514561,51.514594,51.514581,51.514606,51.515834,51.515195,51.515149,51.514818,51.514843,51.514914,51.514496,51.514743,51.514467,51.514453,51.514845,51.514389,51.514399,51.514335,51.514224,51.51422,51.514145,51.514108,51.514359,51.514326,51.514544,51.514569,51.514586,51.514612,51.514575,51.514507,51.514274,51.514293,51.514058,51.514148,51.513961,51.514027,51.514076,51.514096,51.514134,51.514033,51.513996,51.51396,51.513945,51.513821,51.513999,51.513795,51.513766,51.513726,51.513692,51.513672,51.513603,51.513482,51.513458,51.513429,51.513404,51.513359,51.513378,51.513855,51.513875,51.513565,51.513616,51.513742,51.513918,51.513772,51.513502,51.513712,51.513644,51.513711,51.514061,51.514748,51.514794,51.514526,51.514706,51.512311,51.511998,51.511856],[-0.13793,-0.137883,-0.137853,-0.137812,-0.137767,-0.137537,-0.1382,-0.138045,-0.138276,-0.138223,-0.138337,-0.138563,-0.138426,-0.138378,-0.138337,-0.138645,-0.138698,-0.137924,-0.137865,-0.137811,-0.138762,-0.138799,-0.139045,-0.13897,-0.138863,-0.138752,-0.138808,-0.138856,-0.138887,-0.139239,-0.139321,-0.139316,-0.139616,-0.139719,-0.140074,-0.139094,-0.139697,-0.139327,-0.139317,-0.139187,-0.139036,-0.139209,-0.138427,-0.138624,-0.138096,-0.138035,-0.137984,-0.138065,-0.138194,-0.137818,-0.137656,-0.137584,-0.13765,-0.13745,-0.137376,-0.137327,-0.13698,-0.13718,-0.137052,-0.137695,-0.137533,-0.137419,-0.137368,-0.137325,-0.137531,-0.137562,-0.137466,-0.137386,-0.137306,-0.137089,-0.136996,-0.136859,-0.136778,-0.136705,-0.136493,-0.13633,-0.136424,-0.136523,-0.136599,-0.136699,-0.136819,-0.136973,-0.136358,-0.13663,-0.136584,-0.136423,-0.136345,-0.136437,-0.136377,-0.136197,-0.136142,-0.136102,-0.13603,-0.13631,-0.13594,-0.135858,-0.1358,-0.135717,-0.135119,-0.135144,-0.135394,-0.135409,-0.135472,-0.135765,-0.135871,-0.135976,-0.136033,-0.136115,-0.13618,-0.136083,-0.136139,-0.135329,-0.135122,-0.134645,-0.134522,-0.134967,-0.135098,-0.134394,-0.134505,-0.134437,-0.134594,-0.13464,-0.134709,-0.134756,-0.135244,-0.134897,-0.135158,-0.135344,-0.135063,-0.135801,-0.135762,-0.13574,-0.135645,-0.135602,-0.135501,-0.135832,-0.136049,-0.13614,-0.136228,-0.134999,-0.134793,-0.134896,-0.135,-0.133483,-0.133265,-0.133296,-0.132933,-0.133998,-0.134042,-0.134156,-0.134091,-0.134272,-0.13422,-0.134704,-0.134782,-0.13501,-0.134923,-0.134885,-0.134212,-0.134135,-0.134364,-0.134447,-0.134479,-0.134658,-0.134367,-0.134179,-0.13416,-0.134069,-0.134085,-0.133821,-0.133922,-0.13385,-0.133725,-0.133745,-0.133676,-0.133563,-0.133467,-0.133393,-0.134474,-0.135259,-0.135395,-0.136022,-0.136804,-0.136583,-0.135653,-0.135578,-0.13486,-0.13469,-0.134818,-0.135704,-0.135561,-0.135649,-0.135415,-0.135576,-0.135357,-0.135475,-0.136226,-0.136328,-0.136222,-0.136117,-0.13603,-0.136266,-0.136421,-0.136935,-0.136931,-0.136799,-0.13678,-0.136696,-0.136712,-0.136123,-0.135958,-0.135883,-0.135788,-0.135849,-0.136008,-0.136099,-0.13617,-0.135485,-0.135374,-0.135582,-0.135679,-0.135814,-0.135905,-0.135992,-0.136217,-0.136579,-0.136675,-0.136764,-0.136877,-0.136953,-0.13723,-0.136651,-0.136503,-0.137367,-0.137422,-0.137472,-0.1383,-0.137363,-0.137995,-0.138139,-0.138239,-0.138272,-0.138083,-0.137912,-0.137707,-0.137108,-0.137065,-0.138474,-0.138123,-0.137762],[6,4,2,2,8,4,4,4,6,4,4,2,6,2,8,2,2,2,8,6,4,2,4,4,4,2,2,6,2,2,2,2,4,4,2,2,2,2,4,16,4,2,2,2,2,2,8,2,2,2,2,8,2,2,2,2,2,4,2,2,2,4,2,2,4,4,2,4,6,2,8,30,6,8,10,4,2,4,2,2,2,2,2,2,2,2,2,2,2,2,2,4,2,2,8,4,2,8,8,2,8,2,2,4,2,4,6,2,8,2,2,14,6,16,2,2,10,16,4,2,2,4,2,4,4,6,2,4,4,6,2,4,2,2,2,2,6,6,6,6,2,4,2,2,2,4,2,2,2,4,4,2,2,2,2,2,2,2,10,2,2,4,4,2,2,2,2,4,4,10,2,2,2,2,8,2,4,2,2,2,2,2,6,2,2,4,2,2,2,2,2,4,2,2,4,6,4,2,2,2,2,2,4,6,6,2,2,6,2,2,2,2,4,4,8,10,4,10,10,6,6,2,10,8,8,2,8,2,6,4,2,4,2,2,4,6,2,2,8,4,4,2,10,6,4,6,4,2,2,2],null,null,{"interactive":true,"className":"","stroke":false,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.8},["Deaths:  3","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  4","Deaths:  2","Deaths:  2","Deaths:  2","Deaths:  3","Deaths:  2","Deaths:  2","Deaths:  1","Deaths:  3","Deaths:  1","Deaths:  4","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  4","Deaths:  3","Deaths:  2","Deaths:  1","Deaths:  2","Deaths:  2","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  3","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  8","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  4","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  4","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  2","Deaths:  1","Deaths:  2","Deaths:  3","Deaths:  1","Deaths:  4","Deaths:  15","Deaths:  3","Deaths:  4","Deaths:  5","Deaths:  2","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  4","Deaths:  2","Deaths:  1","Deaths:  4","Deaths:  4","Deaths:  1","Deaths:  4","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  2","Deaths:  3","Deaths:  1","Deaths:  4","Deaths:  1","Deaths:  1","Deaths:  7","Deaths:  3","Deaths:  8","Deaths:  1","Deaths:  1","Deaths:  5","Deaths:  8","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  2","Deaths:  2","Deaths:  3","Deaths:  1","Deaths:  2","Deaths:  2","Deaths:  3","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  3","Deaths:  3","Deaths:  3","Deaths:  3","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  5","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  2","Deaths:  5","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  4","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  3","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  3","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  3","Deaths:  3","Deaths:  1","Deaths:  1","Deaths:  3","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  2","Deaths:  4","Deaths:  5","Deaths:  2","Deaths:  5","Deaths:  5","Deaths:  3","Deaths:  3","Deaths:  1","Deaths:  5","Deaths:  4","Deaths:  4","Deaths:  1","Deaths:  4","Deaths:  1","Deaths:  3","Deaths:  2","Deaths:  1","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  2","Deaths:  3","Deaths:  1","Deaths:  1","Deaths:  4","Deaths:  2","Deaths:  2","Deaths:  1","Deaths:  5","Deaths:  3","Deaths:  2","Deaths:  3","Deaths:  2","Deaths:  1","Deaths:  1","Deaths:  1"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null,null]},{"method":"addCircles","args":[[51.513341,51.513876,51.514906,51.512354,51.512139,51.511542,51.510019,51.511295],[-0.136668,-0.139586,-0.139671,-0.13163,-0.133594,-0.135919,-0.133962,-0.138199],2,null,null,{"interactive":true,"className":"","stroke":true,"color":"green","weight":5,"opacity":0.5,"fill":true,"fillColor":"green","fillOpacity":1},"Pump",null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null,null]}],"setView":[[51.5133795,-0.136288],15,[]],"limits":{"lat":[51.510019,51.515834],"lng":[-0.140074,-0.13163]}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="conclusion" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Conclusion</h1>
+<p>With this visualization Snow was able to detect certain hotspots. In
+Broadwick Street (then: Broad Street) there is a pump and many
+Cholera-realated deaths, while in other regions there are pumps and no
+deaths at all. Based on this he was able to refuse theory of air-borne
+Cholera transfer. He put his theory to test by disabling pump in Broad
+Street and saved many lifes.</p>
+<p>We learned how easy it is to reproduce his results with
+<strong>leaflet</strong>.</p>
+</div>
+<div id="bibliography" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Bibliography</h1>
+<ul>
+<li>John Snow Wikipedia <a
+href="https://en.wikipedia.org/wiki/John_Snow"
+class="uri">https://en.wikipedia.org/wiki/John_Snow</a></li>
+<li>Cholera Pumps and Deaths Data <a
+href="https://fusiontables.google.com/DataSource?docid=147wlDisDp6NnpNxHQpbnjAQ-iw4dR2MAmFdQxYc#dQxYc#rows:id=i"
+class="uri">https://fusiontables.google.com/DataSource?docid=147wlDisDp6NnpNxHQpbnjAQ-iw4dR2MAmFdQxYc#dQxYc#rows:id=i</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

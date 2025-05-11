@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Hendrilalaina" />
+
+<meta name="date" content="2025-04-07" />
+
+<title>dygraphs</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet" />
+<script src="site_libs/dygraphs-1.1.1/dygraph-combined.js"></script>
+<script src="site_libs/dygraphs-1.1.1/shapes.js"></script>
+<script src="site_libs/moment-2.8.4/moment.js"></script>
+<script src="site_libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script>
+<script src="site_libs/moment-fquarter-1.0.0/moment-fquarter.min.js"></script>
+<script src="site_libs/dygraphs-binding-1.1.1.6/dygraphs.js"></script>
+<script src="site_libs/Dygraph.Plugins.Rebase-1.0/rebase.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="DataVisualisation_ggplot.html">Ggplot</a>
+</li>
+<li>
+  <a href="DataVisualisation_plotly.html">Plotly</a>
+</li>
+<li>
+  <a href="DataVisualisation_leaflet.html">Leaflet</a>
+</li>
+<li>
+  <a href="DataVisualisation_dygraphs.html">Dygraphs</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">dygraphs</h1>
+<h4 class="author">Hendrilalaina</h4>
+<h4 class="date">2025-04-07</h4>
+
+</div>
+
+
+<p>We will directly download gold and silver price data to R with
+<em>quantmod</em> package and create a dynamic plot with
+<em>dygraphs</em>. * Objectives: basic use of <em>quantmod</em> and
+<em>dygraphs</em>. * Requirements: R Basics</p>
+<div id="data-download-and-understanding" class="section level1"
+number="1">
+<h1><span class="header-section-number">1</span> Data Download and
+Understanding</h1>
+<p>We begin loading required packages: <em>quantmod</em> and
+<em>dygraphs</em>. You can install <em>install.packages()</em> from
+CRAN. As of date of writing you need to install <em>dygraphs</em>
+directly from github. For this you can use the function call below.
+After installing it once, you can load it.</p>
+<pre class="r"><code>suppressPackageStartupMessages(library(quantmod))
+suppressPackageStartupMessages(library(dygraphs))</code></pre>
+<p>Now we download data. This is done with <em>getMetals()</em> from
+<em>quantmod</em> package. Metals are passed as a vector with ticker
+names for metals. “From” is supposed to be the start of the period, but
+only the last 5 years are provided as we will see. So this parameter is
+partially ignored, but if you don’t set it a much shorter period is
+provided.</p>
+<p>For each of these metals an xts-object is stored. These objects are
+combined with cbind to one single sct-object.</p>
+<pre class="r"><code>quantmod::getMetals(Metals = c(&#39;XAU&#39;, &#39;XAG&#39;, &#39;PALL&#39;, &#39;PL&#39;),
+                    from = &quot;2001-01-01&quot;,
+                    to = Sys.Date())</code></pre>
+<pre><code>## Warning in doTryCatch(return(expr), name, parentenv, handler): Oanda only
+## provides historical data for the past 180 days. Symbol: XAU/USD</code></pre>
+<pre><code>## Warning in doTryCatch(return(expr), name, parentenv, handler): Oanda only
+## provides historical data for the past 180 days. Symbol: XAG/USD</code></pre>
+<pre><code>## Warning in doTryCatch(return(expr), name, parentenv, handler): Oanda only
+## provides historical data for the past 180 days. Symbol: XPD/USD</code></pre>
+<pre><code>## Warning in doTryCatch(return(expr), name, parentenv, handler): Oanda only
+## provides historical data for the past 180 days. Symbol: XPT/USD</code></pre>
+<pre><code>## [1] &quot;XAU/USD&quot; &quot;XAG/USD&quot; &quot;XPD/USD&quot; &quot;XPT/USD&quot;</code></pre>
+<pre class="r"><code>metals &lt;- cbind(XAGUSD, XAUUSD, XPDUSD, XPTUSD)</code></pre>
+</div>
+<div id="dynamic-plot" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Dynamic Plot</h1>
+<p>Let’s skip the first line. We will come to that later.</p>
+<p>Plot is created with <em>dygraphs()</em> function. Similar to
+<em>ggplot()</em> you start with basic information on dataframe, and the
+put more aesthetics on top. Most importantly “data” is passed. It has to
+be a timeseries xts-object. Some general information title, x- and y-
+label can be passed as well. More definitions on how the plot should
+look and feel can be added with piping “%&gt;%”.</p>
+<p>With <em>dyRebase()</em> all prices are referenced to 100 at
+beginning of period. <em>dyRangeSelector()</em> defines highlighted
+area. Plot can be extended to other periods with slider at the bottom of
+the page.</p>
+<pre class="r"><code>dy_window &lt;- c(&quot;2024-06-01&quot;, &quot;2025-04-01&quot;)
+dygraph(data = metals,
+        xlab = &quot;Time&quot;,
+        ylab = &quot;Gold, Silver, Platinum, and Palladium Performance&quot;) %&gt;%
+  dyRebase(value = 100) %&gt;%
+  dyRangeSelector(dateWindow = dy_window)</code></pre>
+<div class="dygraphs html-widget html-fill-item" id="htmlwidget-ab58adfff8f52ad14b28" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-ab58adfff8f52ad14b28">{"x":{"attrs":{"xlabel":"Time","ylabel":"Gold, Silver, Platinum, and Palladium Performance","labels":["day","XAG.USD","XAU.USD","XPD.USD","XPT.USD"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}},"showRangeSelector":true,"dateWindow":["2024-06-01T00:00:00.000Z","2025-04-01T00:00:00.000Z"],"rangeSelectorHeight":40,"rangeSelectorPlotFillColor":" #A7B1C4","rangeSelectorPlotStrokeColor":"#808FAB","interactionModel":"Dygraph.Interaction.defaultModel"},"scale":"daily","annotations":[],"shadings":[],"events":[],"format":"date","data":[["2024-10-11T00:00:00.000Z","2024-10-12T00:00:00.000Z","2024-10-13T00:00:00.000Z","2024-10-14T00:00:00.000Z","2024-10-15T00:00:00.000Z","2024-10-16T00:00:00.000Z","2024-10-17T00:00:00.000Z","2024-10-18T00:00:00.000Z","2024-10-19T00:00:00.000Z","2024-10-20T00:00:00.000Z","2024-10-21T00:00:00.000Z","2024-10-22T00:00:00.000Z","2024-10-23T00:00:00.000Z","2024-10-24T00:00:00.000Z","2024-10-25T00:00:00.000Z","2024-10-26T00:00:00.000Z","2024-10-27T00:00:00.000Z","2024-10-28T00:00:00.000Z","2024-10-29T00:00:00.000Z","2024-10-30T00:00:00.000Z","2024-10-31T00:00:00.000Z","2024-11-01T00:00:00.000Z","2024-11-02T00:00:00.000Z","2024-11-03T00:00:00.000Z","2024-11-04T00:00:00.000Z","2024-11-05T00:00:00.000Z","2024-11-06T00:00:00.000Z","2024-11-07T00:00:00.000Z","2024-11-08T00:00:00.000Z","2024-11-09T00:00:00.000Z","2024-11-10T00:00:00.000Z","2024-11-11T00:00:00.000Z","2024-11-12T00:00:00.000Z","2024-11-13T00:00:00.000Z","2024-11-14T00:00:00.000Z","2024-11-15T00:00:00.000Z","2024-11-16T00:00:00.000Z","2024-11-17T00:00:00.000Z","2024-11-18T00:00:00.000Z","2024-11-19T00:00:00.000Z","2024-11-20T00:00:00.000Z","2024-11-21T00:00:00.000Z","2024-11-22T00:00:00.000Z","2024-11-23T00:00:00.000Z","2024-11-24T00:00:00.000Z","2024-11-25T00:00:00.000Z","2024-11-26T00:00:00.000Z","2024-11-27T00:00:00.000Z","2024-11-28T00:00:00.000Z","2024-11-29T00:00:00.000Z","2024-11-30T00:00:00.000Z","2024-12-01T00:00:00.000Z","2024-12-02T00:00:00.000Z","2024-12-03T00:00:00.000Z","2024-12-04T00:00:00.000Z","2024-12-05T00:00:00.000Z","2024-12-06T00:00:00.000Z","2024-12-07T00:00:00.000Z","2024-12-08T00:00:00.000Z","2024-12-09T00:00:00.000Z","2024-12-10T00:00:00.000Z","2024-12-11T00:00:00.000Z","2024-12-12T00:00:00.000Z","2024-12-13T00:00:00.000Z","2024-12-14T00:00:00.000Z","2024-12-15T00:00:00.000Z","2024-12-16T00:00:00.000Z","2024-12-17T00:00:00.000Z","2024-12-18T00:00:00.000Z","2024-12-19T00:00:00.000Z","2024-12-20T00:00:00.000Z","2024-12-21T00:00:00.000Z","2024-12-22T00:00:00.000Z","2024-12-23T00:00:00.000Z","2024-12-24T00:00:00.000Z","2024-12-25T00:00:00.000Z","2024-12-26T00:00:00.000Z","2024-12-27T00:00:00.000Z","2024-12-28T00:00:00.000Z","2024-12-29T00:00:00.000Z","2024-12-30T00:00:00.000Z","2024-12-31T00:00:00.000Z","2025-01-01T00:00:00.000Z","2025-01-02T00:00:00.000Z","2025-01-03T00:00:00.000Z","2025-01-04T00:00:00.000Z","2025-01-05T00:00:00.000Z","2025-01-06T00:00:00.000Z","2025-01-07T00:00:00.000Z","2025-01-08T00:00:00.000Z","2025-01-09T00:00:00.000Z","2025-01-10T00:00:00.000Z","2025-01-11T00:00:00.000Z","2025-01-12T00:00:00.000Z","2025-01-13T00:00:00.000Z","2025-01-14T00:00:00.000Z","2025-01-15T00:00:00.000Z","2025-01-16T00:00:00.000Z","2025-01-17T00:00:00.000Z","2025-01-18T00:00:00.000Z","2025-01-19T00:00:00.000Z","2025-01-20T00:00:00.000Z","2025-01-21T00:00:00.000Z","2025-01-22T00:00:00.000Z","2025-01-23T00:00:00.000Z","2025-01-24T00:00:00.000Z","2025-01-25T00:00:00.000Z","2025-01-26T00:00:00.000Z","2025-01-27T00:00:00.000Z","2025-01-28T00:00:00.000Z","2025-01-29T00:00:00.000Z","2025-01-30T00:00:00.000Z","2025-01-31T00:00:00.000Z","2025-02-01T00:00:00.000Z","2025-02-02T00:00:00.000Z","2025-02-03T00:00:00.000Z","2025-02-04T00:00:00.000Z","2025-02-05T00:00:00.000Z","2025-02-06T00:00:00.000Z","2025-02-07T00:00:00.000Z","2025-02-08T00:00:00.000Z","2025-02-09T00:00:00.000Z","2025-02-10T00:00:00.000Z","2025-02-11T00:00:00.000Z","2025-02-12T00:00:00.000Z","2025-02-13T00:00:00.000Z","2025-02-14T00:00:00.000Z","2025-02-15T00:00:00.000Z","2025-02-16T00:00:00.000Z","2025-02-17T00:00:00.000Z","2025-02-18T00:00:00.000Z","2025-02-19T00:00:00.000Z","2025-02-20T00:00:00.000Z","2025-02-21T00:00:00.000Z","2025-02-22T00:00:00.000Z","2025-02-23T00:00:00.000Z","2025-02-24T00:00:00.000Z","2025-02-25T00:00:00.000Z","2025-02-26T00:00:00.000Z","2025-02-27T00:00:00.000Z","2025-02-28T00:00:00.000Z","2025-03-01T00:00:00.000Z","2025-03-02T00:00:00.000Z","2025-03-03T00:00:00.000Z","2025-03-04T00:00:00.000Z","2025-03-05T00:00:00.000Z","2025-03-06T00:00:00.000Z","2025-03-07T00:00:00.000Z","2025-03-08T00:00:00.000Z","2025-03-09T00:00:00.000Z","2025-03-10T00:00:00.000Z","2025-03-11T00:00:00.000Z","2025-03-12T00:00:00.000Z","2025-03-13T00:00:00.000Z","2025-03-14T00:00:00.000Z","2025-03-15T00:00:00.000Z","2025-03-16T00:00:00.000Z","2025-03-17T00:00:00.000Z","2025-03-18T00:00:00.000Z","2025-03-19T00:00:00.000Z","2025-03-20T00:00:00.000Z","2025-03-21T00:00:00.000Z","2025-03-22T00:00:00.000Z","2025-03-23T00:00:00.000Z","2025-03-24T00:00:00.000Z","2025-03-25T00:00:00.000Z","2025-03-26T00:00:00.000Z","2025-03-27T00:00:00.000Z","2025-03-28T00:00:00.000Z","2025-03-29T00:00:00.000Z","2025-03-30T00:00:00.000Z","2025-03-31T00:00:00.000Z","2025-04-01T00:00:00.000Z","2025-04-02T00:00:00.000Z","2025-04-03T00:00:00.000Z","2025-04-04T00:00:00.000Z","2025-04-05T00:00:00.000Z","2025-04-06T00:00:00.000Z","2025-04-07T00:00:00.000Z","2025-04-08T00:00:00.000Z"],[31.3532,31.537,31.5084,31.2639,31.2996,31.735,31.6771,32.5578,33.7165,33.727,33.9068,34.4038,34.207,33.866,33.5535,33.721,33.7079,33.5716,34.1502,34.0522,33.2198,32.6718,32.4495,32.4504,32.6145,32.5902,31.7267,31.4382,31.5228,31.307,31.3091,30.9972,30.5574,30.7478,30.2064,30.4266,30.2555,30.2598,30.8634,31.27,31.025,30.9862,31.157,31.347,31.3488,30.6136,30.3898,30.3499,30.0716,30.6322,30.6225,30.6168,30.3669,30.8606,31.074,31.2634,31.1577,30.971,30.9742,31.5576,31.9166,31.8464,31.6202,30.7254,30.5575,30.5593,30.586,30.4307,30.2016,29.2902,29.1756,29.514,29.5199,29.663,29.6416,29.6251,29.7098,29.604,29.387,29.3896,29.2379,28.9032,28.9042,29.381,29.6589,29.615,29.6167,29.8466,30.1134,30.112,30.1874,30.3331,30.4075,30.4084,29.942,29.7537,30.1928,30.7622,30.513,30.353,30.351,30.3892,30.6366,30.8266,30.5088,30.7407,30.5985,30.5972,30.29,30.2148,30.5884,31.2137,31.4729,31.326,31.3177,31.2624,31.8188,32.3128,32.1695,32.1636,31.8085,31.8073,32.0842,31.8511,31.9692,32.2712,32.672,32.146,32.1436,32.3336,32.5619,32.7756,32.9408,32.7882,32.4625,32.4699,32.4756,32.0038,31.7899,31.62,31.1446,31.1505,31.1544,31.493,31.7718,32.3012,32.5696,32.4961,32.527,32.5309,32.3282,32.5226,33.024,33.3992,33.8216,33.8045,33.806,33.777,33.9944,33.8133,33.5848,33.0894,33.0325,33.0342,33.0818,33.4073,33.6829,34.0162,34.2784,34.128,34.1336,34.108,33.8848,33.8272,32.5818,30.6866,29.5885,29.5228,30.0328,30.0553],[2647.87,2657.18,2656.57,2653,2654.94,2673.1,2685.7,2712.38,2721.9,2721.98,2727.1,2737.98,2735.28,2732.34,2733.32,2747.22,2746.3,2737.66,2759.96,2782.9,2765.86,2746.42,2736.42,2736.48,2739.19,2739.1,2699.6,2677.56,2690.72,2684.46,2684.41,2648.43,2605.69,2598.36,2562.14,2566.06,2563.17,2563.54,2597.88,2626.97,2638.92,2664.66,2697.74,2716.34,2716.34,2659.5,2626.78,2641.78,2638.49,2656.16,2650.35,2650.21,2636.46,2643.16,2646.92,2642.18,2635.51,2633.62,2633.88,2654.16,2678.26,2703.44,2700.58,2669.38,2648.69,2648.76,2654.86,2646.78,2634.44,2604.34,2610.98,2623.61,2623.6,2619.5,2616.5,2616.87,2629.18,2625.22,2622.11,2622.18,2613.84,2615.26,2624.24,2643.99,2651.04,2639.72,2639.79,2636.26,2646.04,2655.38,2666.41,2681.83,2689.38,2689.38,2675.3,2670.52,2684.89,2707.18,2709.75,2703.15,2702.94,2705.75,2730.39,2754.18,2751.65,2773.25,2770.88,2770.76,2752.41,2749.76,2758.92,2778.54,2799.67,2797.94,2797.81,2802.04,2827.76,2863.14,2859.76,2865.06,2861.23,2861.43,2895.32,2908.44,2893.02,2917.49,2914.7,2882.49,2882.6,2898.26,2918.52,2933.82,2942.69,2933.58,2936.26,2936.35,2943.05,2928.88,2914.73,2889.54,2858.78,2858.14,2858.63,2876.5,2906.75,2915.83,2913.18,2912.48,2909.6,2909.94,2902.17,2908.42,2922.6,2958.2,2988.16,2984.91,2985.34,2993.56,3023.94,3037.28,3043.44,3026.82,3023.88,3023.95,3018.06,3019.34,3020.96,3043.86,3077.44,3085.72,3086.06,3115.42,3127.47,3127.12,3119.18,3072.02,3037.8,3035.3,3007.47,2997.48],[1071.36,1062.78,1061.26,1041.44,1013.62,1016.88,1032.06,1065.56,1080.88,1081.34,1068.46,1071.4,1069.2,1135.35,1169.82,1198.65,1198.79,1208.16,1227.18,1173.89,1129.84,1111.8,1100.7,1100.81,1093.81,1079.7,1046.22,1027.41,1003.87,989.708,989.702,988.112,958.822,940.841,924.9880000000001,944.374,944.466,944.808,979.1420000000001,1017.22,1027.4,1031.3,1026.97,1014.83,1015.16,997.117,984.566,984.201,981.792,987.372,983.728,983.6,981.244,985.206,976.7380000000001,977.678,968.894,958.072,958.284,979.667,975.564,983.9059999999999,997.788,969.154,956.7380000000001,956.845,950.164,936.698,922.153,904.758,904.808,913.398,913.461,919.112,941.256,947,933.838,914.436,908.562,908.689,904.504,900.3579999999999,903.638,909.522,915.044,918.894,918.838,916.08,920.616,923.736,925.85,952.375,962.086,962.12,950.6900000000001,946.3579999999999,956.698,959.633,952.15,961.495,961.372,954.6420000000001,952.78,985.066,1002.68,1017.06,1003.24,1003.08,980.357,966.928,966.377,997.954,1036.04,1067.21,1066.55,1051.25,1031.23,1009.91,1003.94,987.208,975.676,975.652,988.434,991.9640000000001,985.841,1004.02,1017.64,989.553,989.796,1000.58,1003.03,999.726,998.145,990.496,980.24,980.452,961.421,929.49,928.7140000000001,913.454,904.84,908.002,908.38,932.2,941.271,947.458,943.776,945.414,948.151,947.961,943.8150000000001,941.378,945.664,952.027,968.5599999999999,965.025,964.9160000000001,967.41,969.995,958.282,947.242,947.615,955.6180000000001,955.941,956.423,954.838,957.285,972.029,980.774,975.248,975.337,986.807,994.6319999999999,986.838,943.64,912.189,902.986,901.26,894.696,891.898],[976.6079999999999,984.4640000000001,983.538,983.198,984.4349999999999,993.399,998.576,1006.28,1013.99,1014.34,1012.8,1019.08,1026.64,1028.82,1017.37,1024.42,1024.25,1026.62,1046.57,1028.41,998.774,991.452,991.83,991.783,990.63,991.032,984.16,985.202,980.3,969.851,969.954,971.17,950.165,942.556,932.5839999999999,939.684,938.609,938.7,956.418,968.312,964.694,960.952,963.566,963.994,964.162,948.684,929.978,927.562,929.948,941.296,945.602,945.51,941.862,950.074,945.326,942.842,935.278,929.486,929.574,943.116,940.8680000000001,943.948,944.484,928.874,922.986,922.996,928.412,934.524,931.352,921.754,921.312,925.728,925.829,934.34,944.758,948.336,948.53,937.272,921.1180000000001,921.2380000000001,914.88,899.076,896.2569999999999,906.138,924.288,932.112,932.086,932.669,948.654,965.494,969.052,978.907,978.42,978.409,968.644,948.612,935.018,935.787,940.77,952.331,952.211,950.444,949.353,956.8819999999999,953.758,963.355,958.886,958.715,949.072,947.849,956.418,994.48,1023.44,1031.99,1031.72,1003.42,994.625,1005.49,1009.72,1013.68,998.75,998.65,1014.68,1022.29,1029.71,1041.72,1027.17,1001.35,1001.45,1001.84,999.3150000000001,988.812,985.566,981.49,978.63,978.804,973.5170000000001,965.603,971.724,958.901,939.09,939.9880000000001,940.225,954.864,961.812,969.2569999999999,970.694,968.248,962.754,962.655,962.852,968.718,988.122,989.412,1007.58,1006.48,1006.26,1013.4,1021.18,1005.46,995.33,979.026,975.168,975.5359999999999,969.559,968.0940000000001,966.4160000000001,971.425,982.321,978.821,978.914,996.014,996.8579999999999,981.367,950.864,916.16,897.975,896.874,896.4930000000001,899.085]],"plugins":{"Rebase":100}},"evals":["attrs.interactionModel"],"jsHooks":[]}</script>
+<p>This plot is very dynamic. You can modify time range by changing
+start of end, or moving with a fixed period. Specific areas can be
+zoomed in by clicking on the graph. If you want to unzoom just
+double-click in the graph. Prices are always shown for current position
+at the top of the plot.</p>
+<p>All metals increased prices since September 2018, Palladium by more
+than 60%. But this picture changes when period is extended to the last 5
+years.</p>
+</div>
+<div id="linked-plots" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Linked Plots</h1>
+<pre class="r"><code>dygraph(XAUUSD, group = &quot;linked&quot;) %&gt;%
+  dyRangeSelector(dateWindow = dy_window)</code></pre>
+<div class="dygraphs html-widget html-fill-item" id="htmlwidget-31693d39f8a5a73bd0b1" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-31693d39f8a5a73bd0b1">{"x":{"attrs":{"labels":["day","XAU.USD"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}},"showRangeSelector":true,"dateWindow":["2024-06-01T00:00:00.000Z","2025-04-01T00:00:00.000Z"],"rangeSelectorHeight":40,"rangeSelectorPlotFillColor":" #A7B1C4","rangeSelectorPlotStrokeColor":"#808FAB","interactionModel":"Dygraph.Interaction.defaultModel"},"scale":"daily","group":"linked","annotations":[],"shadings":[],"events":[],"format":"date","data":[["2024-10-11T00:00:00.000Z","2024-10-12T00:00:00.000Z","2024-10-13T00:00:00.000Z","2024-10-14T00:00:00.000Z","2024-10-15T00:00:00.000Z","2024-10-16T00:00:00.000Z","2024-10-17T00:00:00.000Z","2024-10-18T00:00:00.000Z","2024-10-19T00:00:00.000Z","2024-10-20T00:00:00.000Z","2024-10-21T00:00:00.000Z","2024-10-22T00:00:00.000Z","2024-10-23T00:00:00.000Z","2024-10-24T00:00:00.000Z","2024-10-25T00:00:00.000Z","2024-10-26T00:00:00.000Z","2024-10-27T00:00:00.000Z","2024-10-28T00:00:00.000Z","2024-10-29T00:00:00.000Z","2024-10-30T00:00:00.000Z","2024-10-31T00:00:00.000Z","2024-11-01T00:00:00.000Z","2024-11-02T00:00:00.000Z","2024-11-03T00:00:00.000Z","2024-11-04T00:00:00.000Z","2024-11-05T00:00:00.000Z","2024-11-06T00:00:00.000Z","2024-11-07T00:00:00.000Z","2024-11-08T00:00:00.000Z","2024-11-09T00:00:00.000Z","2024-11-10T00:00:00.000Z","2024-11-11T00:00:00.000Z","2024-11-12T00:00:00.000Z","2024-11-13T00:00:00.000Z","2024-11-14T00:00:00.000Z","2024-11-15T00:00:00.000Z","2024-11-16T00:00:00.000Z","2024-11-17T00:00:00.000Z","2024-11-18T00:00:00.000Z","2024-11-19T00:00:00.000Z","2024-11-20T00:00:00.000Z","2024-11-21T00:00:00.000Z","2024-11-22T00:00:00.000Z","2024-11-23T00:00:00.000Z","2024-11-24T00:00:00.000Z","2024-11-25T00:00:00.000Z","2024-11-26T00:00:00.000Z","2024-11-27T00:00:00.000Z","2024-11-28T00:00:00.000Z","2024-11-29T00:00:00.000Z","2024-11-30T00:00:00.000Z","2024-12-01T00:00:00.000Z","2024-12-02T00:00:00.000Z","2024-12-03T00:00:00.000Z","2024-12-04T00:00:00.000Z","2024-12-05T00:00:00.000Z","2024-12-06T00:00:00.000Z","2024-12-07T00:00:00.000Z","2024-12-08T00:00:00.000Z","2024-12-09T00:00:00.000Z","2024-12-10T00:00:00.000Z","2024-12-11T00:00:00.000Z","2024-12-12T00:00:00.000Z","2024-12-13T00:00:00.000Z","2024-12-14T00:00:00.000Z","2024-12-15T00:00:00.000Z","2024-12-16T00:00:00.000Z","2024-12-17T00:00:00.000Z","2024-12-18T00:00:00.000Z","2024-12-19T00:00:00.000Z","2024-12-20T00:00:00.000Z","2024-12-21T00:00:00.000Z","2024-12-22T00:00:00.000Z","2024-12-23T00:00:00.000Z","2024-12-24T00:00:00.000Z","2024-12-25T00:00:00.000Z","2024-12-26T00:00:00.000Z","2024-12-27T00:00:00.000Z","2024-12-28T00:00:00.000Z","2024-12-29T00:00:00.000Z","2024-12-30T00:00:00.000Z","2024-12-31T00:00:00.000Z","2025-01-01T00:00:00.000Z","2025-01-02T00:00:00.000Z","2025-01-03T00:00:00.000Z","2025-01-04T00:00:00.000Z","2025-01-05T00:00:00.000Z","2025-01-06T00:00:00.000Z","2025-01-07T00:00:00.000Z","2025-01-08T00:00:00.000Z","2025-01-09T00:00:00.000Z","2025-01-10T00:00:00.000Z","2025-01-11T00:00:00.000Z","2025-01-12T00:00:00.000Z","2025-01-13T00:00:00.000Z","2025-01-14T00:00:00.000Z","2025-01-15T00:00:00.000Z","2025-01-16T00:00:00.000Z","2025-01-17T00:00:00.000Z","2025-01-18T00:00:00.000Z","2025-01-19T00:00:00.000Z","2025-01-20T00:00:00.000Z","2025-01-21T00:00:00.000Z","2025-01-22T00:00:00.000Z","2025-01-23T00:00:00.000Z","2025-01-24T00:00:00.000Z","2025-01-25T00:00:00.000Z","2025-01-26T00:00:00.000Z","2025-01-27T00:00:00.000Z","2025-01-28T00:00:00.000Z","2025-01-29T00:00:00.000Z","2025-01-30T00:00:00.000Z","2025-01-31T00:00:00.000Z","2025-02-01T00:00:00.000Z","2025-02-02T00:00:00.000Z","2025-02-03T00:00:00.000Z","2025-02-04T00:00:00.000Z","2025-02-05T00:00:00.000Z","2025-02-06T00:00:00.000Z","2025-02-07T00:00:00.000Z","2025-02-08T00:00:00.000Z","2025-02-09T00:00:00.000Z","2025-02-10T00:00:00.000Z","2025-02-11T00:00:00.000Z","2025-02-12T00:00:00.000Z","2025-02-13T00:00:00.000Z","2025-02-14T00:00:00.000Z","2025-02-15T00:00:00.000Z","2025-02-16T00:00:00.000Z","2025-02-17T00:00:00.000Z","2025-02-18T00:00:00.000Z","2025-02-19T00:00:00.000Z","2025-02-20T00:00:00.000Z","2025-02-21T00:00:00.000Z","2025-02-22T00:00:00.000Z","2025-02-23T00:00:00.000Z","2025-02-24T00:00:00.000Z","2025-02-25T00:00:00.000Z","2025-02-26T00:00:00.000Z","2025-02-27T00:00:00.000Z","2025-02-28T00:00:00.000Z","2025-03-01T00:00:00.000Z","2025-03-02T00:00:00.000Z","2025-03-03T00:00:00.000Z","2025-03-04T00:00:00.000Z","2025-03-05T00:00:00.000Z","2025-03-06T00:00:00.000Z","2025-03-07T00:00:00.000Z","2025-03-08T00:00:00.000Z","2025-03-09T00:00:00.000Z","2025-03-10T00:00:00.000Z","2025-03-11T00:00:00.000Z","2025-03-12T00:00:00.000Z","2025-03-13T00:00:00.000Z","2025-03-14T00:00:00.000Z","2025-03-15T00:00:00.000Z","2025-03-16T00:00:00.000Z","2025-03-17T00:00:00.000Z","2025-03-18T00:00:00.000Z","2025-03-19T00:00:00.000Z","2025-03-20T00:00:00.000Z","2025-03-21T00:00:00.000Z","2025-03-22T00:00:00.000Z","2025-03-23T00:00:00.000Z","2025-03-24T00:00:00.000Z","2025-03-25T00:00:00.000Z","2025-03-26T00:00:00.000Z","2025-03-27T00:00:00.000Z","2025-03-28T00:00:00.000Z","2025-03-29T00:00:00.000Z","2025-03-30T00:00:00.000Z","2025-03-31T00:00:00.000Z","2025-04-01T00:00:00.000Z","2025-04-02T00:00:00.000Z","2025-04-03T00:00:00.000Z","2025-04-04T00:00:00.000Z","2025-04-05T00:00:00.000Z","2025-04-06T00:00:00.000Z","2025-04-07T00:00:00.000Z","2025-04-08T00:00:00.000Z"],[2647.87,2657.18,2656.57,2653,2654.94,2673.1,2685.7,2712.38,2721.9,2721.98,2727.1,2737.98,2735.28,2732.34,2733.32,2747.22,2746.3,2737.66,2759.96,2782.9,2765.86,2746.42,2736.42,2736.48,2739.19,2739.1,2699.6,2677.56,2690.72,2684.46,2684.41,2648.43,2605.69,2598.36,2562.14,2566.06,2563.17,2563.54,2597.88,2626.97,2638.92,2664.66,2697.74,2716.34,2716.34,2659.5,2626.78,2641.78,2638.49,2656.16,2650.35,2650.21,2636.46,2643.16,2646.92,2642.18,2635.51,2633.62,2633.88,2654.16,2678.26,2703.44,2700.58,2669.38,2648.69,2648.76,2654.86,2646.78,2634.44,2604.34,2610.98,2623.61,2623.6,2619.5,2616.5,2616.87,2629.18,2625.22,2622.11,2622.18,2613.84,2615.26,2624.24,2643.99,2651.04,2639.72,2639.79,2636.26,2646.04,2655.38,2666.41,2681.83,2689.38,2689.38,2675.3,2670.52,2684.89,2707.18,2709.75,2703.15,2702.94,2705.75,2730.39,2754.18,2751.65,2773.25,2770.88,2770.76,2752.41,2749.76,2758.92,2778.54,2799.67,2797.94,2797.81,2802.04,2827.76,2863.14,2859.76,2865.06,2861.23,2861.43,2895.32,2908.44,2893.02,2917.49,2914.7,2882.49,2882.6,2898.26,2918.52,2933.82,2942.69,2933.58,2936.26,2936.35,2943.05,2928.88,2914.73,2889.54,2858.78,2858.14,2858.63,2876.5,2906.75,2915.83,2913.18,2912.48,2909.6,2909.94,2902.17,2908.42,2922.6,2958.2,2988.16,2984.91,2985.34,2993.56,3023.94,3037.28,3043.44,3026.82,3023.88,3023.95,3018.06,3019.34,3020.96,3043.86,3077.44,3085.72,3086.06,3115.42,3127.47,3127.12,3119.18,3072.02,3037.8,3035.3,3007.47,2997.48]]},"evals":["attrs.interactionModel"],"jsHooks":[]}</script>
+<pre class="r"><code>dygraph(XAUUSD, group = &quot;linked&quot;) %&gt;%
+  dyRangeSelector(dateWindow = dy_window)</code></pre>
+<div class="dygraphs html-widget html-fill-item" id="htmlwidget-6e9f1f74f0856de3398c" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-6e9f1f74f0856de3398c">{"x":{"attrs":{"labels":["day","XAU.USD"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}},"showRangeSelector":true,"dateWindow":["2024-06-01T00:00:00.000Z","2025-04-01T00:00:00.000Z"],"rangeSelectorHeight":40,"rangeSelectorPlotFillColor":" #A7B1C4","rangeSelectorPlotStrokeColor":"#808FAB","interactionModel":"Dygraph.Interaction.defaultModel"},"scale":"daily","group":"linked","annotations":[],"shadings":[],"events":[],"format":"date","data":[["2024-10-11T00:00:00.000Z","2024-10-12T00:00:00.000Z","2024-10-13T00:00:00.000Z","2024-10-14T00:00:00.000Z","2024-10-15T00:00:00.000Z","2024-10-16T00:00:00.000Z","2024-10-17T00:00:00.000Z","2024-10-18T00:00:00.000Z","2024-10-19T00:00:00.000Z","2024-10-20T00:00:00.000Z","2024-10-21T00:00:00.000Z","2024-10-22T00:00:00.000Z","2024-10-23T00:00:00.000Z","2024-10-24T00:00:00.000Z","2024-10-25T00:00:00.000Z","2024-10-26T00:00:00.000Z","2024-10-27T00:00:00.000Z","2024-10-28T00:00:00.000Z","2024-10-29T00:00:00.000Z","2024-10-30T00:00:00.000Z","2024-10-31T00:00:00.000Z","2024-11-01T00:00:00.000Z","2024-11-02T00:00:00.000Z","2024-11-03T00:00:00.000Z","2024-11-04T00:00:00.000Z","2024-11-05T00:00:00.000Z","2024-11-06T00:00:00.000Z","2024-11-07T00:00:00.000Z","2024-11-08T00:00:00.000Z","2024-11-09T00:00:00.000Z","2024-11-10T00:00:00.000Z","2024-11-11T00:00:00.000Z","2024-11-12T00:00:00.000Z","2024-11-13T00:00:00.000Z","2024-11-14T00:00:00.000Z","2024-11-15T00:00:00.000Z","2024-11-16T00:00:00.000Z","2024-11-17T00:00:00.000Z","2024-11-18T00:00:00.000Z","2024-11-19T00:00:00.000Z","2024-11-20T00:00:00.000Z","2024-11-21T00:00:00.000Z","2024-11-22T00:00:00.000Z","2024-11-23T00:00:00.000Z","2024-11-24T00:00:00.000Z","2024-11-25T00:00:00.000Z","2024-11-26T00:00:00.000Z","2024-11-27T00:00:00.000Z","2024-11-28T00:00:00.000Z","2024-11-29T00:00:00.000Z","2024-11-30T00:00:00.000Z","2024-12-01T00:00:00.000Z","2024-12-02T00:00:00.000Z","2024-12-03T00:00:00.000Z","2024-12-04T00:00:00.000Z","2024-12-05T00:00:00.000Z","2024-12-06T00:00:00.000Z","2024-12-07T00:00:00.000Z","2024-12-08T00:00:00.000Z","2024-12-09T00:00:00.000Z","2024-12-10T00:00:00.000Z","2024-12-11T00:00:00.000Z","2024-12-12T00:00:00.000Z","2024-12-13T00:00:00.000Z","2024-12-14T00:00:00.000Z","2024-12-15T00:00:00.000Z","2024-12-16T00:00:00.000Z","2024-12-17T00:00:00.000Z","2024-12-18T00:00:00.000Z","2024-12-19T00:00:00.000Z","2024-12-20T00:00:00.000Z","2024-12-21T00:00:00.000Z","2024-12-22T00:00:00.000Z","2024-12-23T00:00:00.000Z","2024-12-24T00:00:00.000Z","2024-12-25T00:00:00.000Z","2024-12-26T00:00:00.000Z","2024-12-27T00:00:00.000Z","2024-12-28T00:00:00.000Z","2024-12-29T00:00:00.000Z","2024-12-30T00:00:00.000Z","2024-12-31T00:00:00.000Z","2025-01-01T00:00:00.000Z","2025-01-02T00:00:00.000Z","2025-01-03T00:00:00.000Z","2025-01-04T00:00:00.000Z","2025-01-05T00:00:00.000Z","2025-01-06T00:00:00.000Z","2025-01-07T00:00:00.000Z","2025-01-08T00:00:00.000Z","2025-01-09T00:00:00.000Z","2025-01-10T00:00:00.000Z","2025-01-11T00:00:00.000Z","2025-01-12T00:00:00.000Z","2025-01-13T00:00:00.000Z","2025-01-14T00:00:00.000Z","2025-01-15T00:00:00.000Z","2025-01-16T00:00:00.000Z","2025-01-17T00:00:00.000Z","2025-01-18T00:00:00.000Z","2025-01-19T00:00:00.000Z","2025-01-20T00:00:00.000Z","2025-01-21T00:00:00.000Z","2025-01-22T00:00:00.000Z","2025-01-23T00:00:00.000Z","2025-01-24T00:00:00.000Z","2025-01-25T00:00:00.000Z","2025-01-26T00:00:00.000Z","2025-01-27T00:00:00.000Z","2025-01-28T00:00:00.000Z","2025-01-29T00:00:00.000Z","2025-01-30T00:00:00.000Z","2025-01-31T00:00:00.000Z","2025-02-01T00:00:00.000Z","2025-02-02T00:00:00.000Z","2025-02-03T00:00:00.000Z","2025-02-04T00:00:00.000Z","2025-02-05T00:00:00.000Z","2025-02-06T00:00:00.000Z","2025-02-07T00:00:00.000Z","2025-02-08T00:00:00.000Z","2025-02-09T00:00:00.000Z","2025-02-10T00:00:00.000Z","2025-02-11T00:00:00.000Z","2025-02-12T00:00:00.000Z","2025-02-13T00:00:00.000Z","2025-02-14T00:00:00.000Z","2025-02-15T00:00:00.000Z","2025-02-16T00:00:00.000Z","2025-02-17T00:00:00.000Z","2025-02-18T00:00:00.000Z","2025-02-19T00:00:00.000Z","2025-02-20T00:00:00.000Z","2025-02-21T00:00:00.000Z","2025-02-22T00:00:00.000Z","2025-02-23T00:00:00.000Z","2025-02-24T00:00:00.000Z","2025-02-25T00:00:00.000Z","2025-02-26T00:00:00.000Z","2025-02-27T00:00:00.000Z","2025-02-28T00:00:00.000Z","2025-03-01T00:00:00.000Z","2025-03-02T00:00:00.000Z","2025-03-03T00:00:00.000Z","2025-03-04T00:00:00.000Z","2025-03-05T00:00:00.000Z","2025-03-06T00:00:00.000Z","2025-03-07T00:00:00.000Z","2025-03-08T00:00:00.000Z","2025-03-09T00:00:00.000Z","2025-03-10T00:00:00.000Z","2025-03-11T00:00:00.000Z","2025-03-12T00:00:00.000Z","2025-03-13T00:00:00.000Z","2025-03-14T00:00:00.000Z","2025-03-15T00:00:00.000Z","2025-03-16T00:00:00.000Z","2025-03-17T00:00:00.000Z","2025-03-18T00:00:00.000Z","2025-03-19T00:00:00.000Z","2025-03-20T00:00:00.000Z","2025-03-21T00:00:00.000Z","2025-03-22T00:00:00.000Z","2025-03-23T00:00:00.000Z","2025-03-24T00:00:00.000Z","2025-03-25T00:00:00.000Z","2025-03-26T00:00:00.000Z","2025-03-27T00:00:00.000Z","2025-03-28T00:00:00.000Z","2025-03-29T00:00:00.000Z","2025-03-30T00:00:00.000Z","2025-03-31T00:00:00.000Z","2025-04-01T00:00:00.000Z","2025-04-02T00:00:00.000Z","2025-04-03T00:00:00.000Z","2025-04-04T00:00:00.000Z","2025-04-05T00:00:00.000Z","2025-04-06T00:00:00.000Z","2025-04-07T00:00:00.000Z","2025-04-08T00:00:00.000Z"],[2647.87,2657.18,2656.57,2653,2654.94,2673.1,2685.7,2712.38,2721.9,2721.98,2727.1,2737.98,2735.28,2732.34,2733.32,2747.22,2746.3,2737.66,2759.96,2782.9,2765.86,2746.42,2736.42,2736.48,2739.19,2739.1,2699.6,2677.56,2690.72,2684.46,2684.41,2648.43,2605.69,2598.36,2562.14,2566.06,2563.17,2563.54,2597.88,2626.97,2638.92,2664.66,2697.74,2716.34,2716.34,2659.5,2626.78,2641.78,2638.49,2656.16,2650.35,2650.21,2636.46,2643.16,2646.92,2642.18,2635.51,2633.62,2633.88,2654.16,2678.26,2703.44,2700.58,2669.38,2648.69,2648.76,2654.86,2646.78,2634.44,2604.34,2610.98,2623.61,2623.6,2619.5,2616.5,2616.87,2629.18,2625.22,2622.11,2622.18,2613.84,2615.26,2624.24,2643.99,2651.04,2639.72,2639.79,2636.26,2646.04,2655.38,2666.41,2681.83,2689.38,2689.38,2675.3,2670.52,2684.89,2707.18,2709.75,2703.15,2702.94,2705.75,2730.39,2754.18,2751.65,2773.25,2770.88,2770.76,2752.41,2749.76,2758.92,2778.54,2799.67,2797.94,2797.81,2802.04,2827.76,2863.14,2859.76,2865.06,2861.23,2861.43,2895.32,2908.44,2893.02,2917.49,2914.7,2882.49,2882.6,2898.26,2918.52,2933.82,2942.69,2933.58,2936.26,2936.35,2943.05,2928.88,2914.73,2889.54,2858.78,2858.14,2858.63,2876.5,2906.75,2915.83,2913.18,2912.48,2909.6,2909.94,2902.17,2908.42,2922.6,2958.2,2988.16,2984.91,2985.34,2993.56,3023.94,3037.28,3043.44,3026.82,3023.88,3023.95,3018.06,3019.34,3020.96,3043.86,3077.44,3085.72,3086.06,3115.42,3127.47,3127.12,3119.18,3072.02,3037.8,3035.3,3007.47,2997.48]]},"evals":["attrs.interactionModel"],"jsHooks":[]}</script>
+</div>
+<div id="more-informations" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> More Informations</h1>
+<p>There is more to discover. Take a look at these websites to learn
+more about financial modeling with <em>quantmod</em> or dynamic
+timseries plotting with <em>dygraphs</em>.</p>
+<ul>
+<li>Quantmod Package <a href="http://www.quantmod.com"
+class="uri">http://www.quantmod.com</a></li>
+<li>Dygraphs Package <a href="https://rstudio.github.io/dygraphs/"
+class="uri">https://rstudio.github.io/dygraphs/</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

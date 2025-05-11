@@ -1,0 +1,16 @@
+name: "my-website"
+navbar:
+  title: "My Website"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Ggplot"
+      href: DataVisualisation_ggplot.html 
+    - text: "Plotly"
+      href: DataVisualisation_plotly.html
+    - text: "Leaflet"
+      href: DataVisualisation_leaflet.html
+    - text: "Dygraphs"
+      href: DataVisualisation_dygraphs.html
+    - text: "About"
+      href: about.html

@@ -1,0 +1,97 @@
+---
+title: "plotly"
+author: "Hendrilalaina"
+date: "2025-03-31"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+suppressPackageStartupMessages(library(tidyr))
+suppressPackageStartupMessages(library(plotly))
+suppressPackageStartupMessages(library(dplyr))
+```
+
+# Introduction
+
+We will use data from World Happiness Report. The World Happiness Report is a landmark survey of the state of global happiness.
+
+# Data Preparation
+
+The data can be downloaded from (<https:www.kaggle.com/unsdsn/world-happiness/>)
+
+```{r}
+happiness_2015 <- read.csv("../RUltimateMaterial-main/data/2015.csv") %>%
+  mutate(year = 2015)
+happiness_2016 <- read.csv("../RUltimateMaterial-main/data/2016.csv") %>%
+  mutate(year = 2016)
+happiness_2017 <- read.csv("../RUltimateMaterial-main/data/2017.csv") %>%
+  mutate(year = 2017)
+
+happiness <- happiness_2015 %>%
+  bind_rows(happiness_2016) %>%
+  bind_rows(happiness_2017) %>%
+  select(Country, `Happiness.Score`, `Economy..GDP.per.Capita.`, `Health..Life.Expectancy.`, Freedom, year)
+happiness %>% glimpse()
+```
+Rename columns
+
+```{r}
+happiness_mod <- happiness %>%
+  rename(happiness_score = Happiness.Score) %>%
+  rename(economy_gdp = Economy..GDP.per.Capita.) %>%
+  rename(health_life_exp = Health..Life.Expectancy.)
+```
+
+# Visualization
+
+## Complet Plot
+
+We create a complex visualization (5 dimensional), which has these properties: 
+- x axis refers to GDP (an economical value) 
+- y axis refers to life expectancy (a health value) 
+- size refers to freedom - color refers to happiness score 
+- text refers to country - slider refers to the year
+
+```{r}
+p1 <- happiness_mod %>%
+  filter(year == 2015) %>%
+  plot_ly(x = ~economy_gdp,
+          y = ~health_life_exp,
+          size = ~Freedom^5,
+          color = ~happiness_score,
+          text = ~Country,
+          hoverinfo = "text") %>%
+  add_markers() %>%
+  colorbar(title = "Happiness Score") %>%
+  layout(title = "Happiness 2015",
+         xaxis = list(title = "Economy (repr. by GDP)"),
+         yaxis = list(title = "Healthy repr. by Life Expectancy"))
+```
+## Subplots
+
+```{r}
+p2 <- happiness_mod %>%
+  filter(year == 2016) %>%
+  plot_ly(x = ~economy_gdp,
+          y = ~health_life_exp,
+          size = ~Freedom^5,
+          color = ~happiness_score,
+          text = ~Country,
+          hoverinfo = "text") %>%
+  add_markers() %>%
+  colorbar(title = "Happiness Score") %>%
+  layout(title = "Happiness 2015/2016",
+         xaxis = list(title = "Economy (repr. by GDP)"),
+         yaxis = list(title = "Healthy repr. by Life Expectancy"))
+subplot(titleX = TRUE, shareY = TRUE, p1, p2)
+```
+
